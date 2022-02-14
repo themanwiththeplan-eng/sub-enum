@@ -38,7 +38,7 @@ if(path){
     })
     
 }else if(fileprobe){
-    lineReader.eachLine(fileprobe, function(line) {
+    lineReader.eachLine(fileprobe, function(line, last) {
         let l = [];
         l.push(line);
         // console.log(l);
@@ -57,9 +57,13 @@ if(path){
                 }else if(error.request){
                     console.log(`Not a 200`);
                 }
+            }).then(function(){
+                if(last){
+                    process.exit();
+                }
             })
         }
-
+        
         
       });
     
