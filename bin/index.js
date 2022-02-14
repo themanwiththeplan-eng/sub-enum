@@ -21,6 +21,7 @@ let defaultport = '443';
 let probe = args.probe;
 let specport = args.sp;
 let asn = args.asn;
+let help = args.h;
 
 if(path){
     lineReader.eachLine(path, function(line){
@@ -109,6 +110,16 @@ if(path){
         process.exit();
     })
     
+}else if(help){
+    console.log(`The flags that you can use are: 
+    
+    --p : Use this with a file path to print the file line by line
+    --d : Use this for subdomain enumeration
+    --fp : Similar to httprobe, use this to scan a file for endpoints with status code of 200 on default port of 443
+    --probe : Use this to scan a single endpoint for status 200 using default port 443
+    --sp : Use this to scan single endpoint with any port that you will like, wizard setup... prompts for url
+    --asn: Use this to find autonomous system numbers`);
+    process.exit();
 }else{
     console.log(`The flags that you can use are: 
     
