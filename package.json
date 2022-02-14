@@ -1,0 +1,20 @@
+{
+  "name": "sub-enum",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bin/index.js",
+  "bin": {
+    "sub": "./bin/index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Dakota Dunn github.com/themanwiththeplan-eng",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.25.0",
+    "line-reader": "^0.4.0",
+    "yargs": "^17.3.1"
+  }
+}
