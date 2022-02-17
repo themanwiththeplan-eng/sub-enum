@@ -45,8 +45,8 @@ if(path){
 				l.push(line);
         // console.log(l);
 				for(let i = 0; i < l.length; i++){
-            // console.log(l[i])
-				  axios.get(l[i], {
+					// console.log(l[i])
+					axios.get(l[i], {
 
 				  }).then((response) => {
                 // console.log(response.status);
@@ -63,8 +63,7 @@ if(path){
 					}).catch(function(error){
 				     if(error.response){
 				          console.log(error.response.status);
-				      }else if(error.request){
-				          
+				      }else if(error.request){ 
 				      }
 				  }).then(function(){
 				      if(last){
