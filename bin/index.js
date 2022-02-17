@@ -1,14 +1,14 @@
 #!/usr/bin/env node
-const yargs = require('yargs');
-const axios = require('axios').default;
-const fs = require('fs');
-const readline = require('readline');
-const lineReader = require('line-reader');
-const { error } = require('console');
+const yargs = require("yargs");
+const axios = require("axios").default;
+const fs = require("fs");
+const readline = require("readline");
+const lineReader = require("line-reader");
+const { error } = require("console");
 
 const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
+  input: process.stdin,
+  output: process.stdout,
 });
 
 let args = yargs.argv;
@@ -17,108 +17,106 @@ let path = args.p;
 let subdomain = args.d;
 let key = args.k;
 let fileprobe = args.fp;
-let defaultport = '443';
+let defaultport = "443";
 let probe = args.probe;
 let specport = args.sp;
 let asn = args.asn;
 let help = args.h;
 
-if(path){
-    lineReader.eachLine(path, function(line){
-        console.log(`Line from file: ${line}`);
-    })
-}else if(subdomain){
-    let initialSearch = `https://subdomains.whoisxmlapi.com/api/v1?apiKey=${key}&domainName=${subdomain}`;
-    console.log(initialSearch);
-    axios.get(initialSearch, {
-
-    }).then((response) =>{
-        for(let i = 0; i < response.data.result.records.length; i++){
-            console.log(response.data.result.records[i].domain);
-        }
-    })
-    
-}else if(fileprobe){
-		// TODO: Make sure to work on filtering out the file for eachline that's read whether it's a 200 or not	
-    lineReader.eachLine(fileprobe, function(line, last) {
-        let l = [];
-				l.push(line);
-        // console.log(l);
-				for(let i = 0; i < l.length; i++){
-					// console.log(l[i])
-					axios.get(l[i], {
-
-				  }).then((response) => {
-                // console.log(response.status);
-				      if(response.status == 200){
-									console.log(l[i]);
-									const arr = [(l[i])];
-									console.log(arr);
-									fs.appendFile(`reconfile`, JSON.stringify(arr), (err) => {
-										if(err){
-												console.log(err);
-										}
-									});
-							}
-					}).catch(function(error){
-				     if(error.response){
-				          console.log(error.response.status);
-				      }else if(error.request){ 
-				      }
-				  }).then(function(){
-				      if(last){
-				          process.exit();
-				      }
-				  })
-				}
-        
-        
-      });
-    
-}else if(probe){
-      axios.get(probe + `:${defaultport}`, {
-
-      }).then((response) =>{
-        if(response.status == 200){
-            console.log(probe);
-        }
-      }).catch(function(error){
-          if(error.response){
-              console.log(error.response.status)
-          }else if(error.request){
-              console.log(`Not a 200`);
+if (path) {
+  lineReader.eachLine(path, function (line) {
+    console.log(`Line from file: ${line}`);
+  });
+} else if (subdomain) {
+  let initialSearch = `https://subdomains.whoisxmlapi.com/api/v1?apiKey=${key}&domainName=${subdomain}`;
+  console.log(initialSearch);
+  axios.get(initialSearch, {}).then((response) => {
+    for (let i = 0; i < response.data.result.records.length; i++) {
+      console.log(response.data.result.records[i].domain);
+    }
+  });
+} else if (fileprobe) {
+  // TODO: Make sure to work on filtering out the file for eachline that's read whether it's a 200 or not
+  lineReader.eachLine(fileprobe, function (line, last) {
+    let l = [];
+    l.push(line);
+    // console.log(l);
+    for (let i = 0; i < l.length; i++) {
+      // console.log(l[i])
+      axios
+        .get(l[i], {})
+        .then((response) => {
+          // console.log(response.status);
+          if (response.status == 200) {
+            console.log(l[i]);
+            const arr = [l[i]];
+            console.log(arr);
+            fs.appendFile(`reconfile`, JSON.stringify(arr), (err) => {
+              if (err) {
+                console.log(err);
+              }
+            });
           }
-      })
-}else if(specport){
-    rl.question(`URL:`, function(url){
-        rl.close();
-        let x = url + ':' + specport;
-        axios.get(x, {
-
-        }).then((response) => {
-            if(response.status == 200){
-                console.log(x);
-            }
-        }).catch(function(error){
-            if(error.response){
-                console.log(error.response.status)
-            }else if(error.request){
-                console.log(`Not a 200`);
-            }
         })
+        .catch(function (error) {
+          if (error.response) {
+            console.log(error.response.status);
+          } else if (error.request) {
+          }
+        })
+        .then(function () {
+          if (last) {
+            process.exit();
+          }
+        });
+    }
+  });
+} else if (probe) {
+  axios
+    .get(probe + `:${defaultport}`, {})
+    .then((response) => {
+      if (response.status == 200) {
+        console.log(probe);
+      }
     })
-}else if(asn){
-    let asnurl = `https://api.hackertarget.com/aslookup?q=${asn}`
-    axios.get(asnurl, {
-
-    }).then((response) => {
-        console.log(response.data);
-    }).then(function(){
-        process.exit();
+    .catch(function (error) {
+      if (error.response) {
+        console.log(error.response.status);
+      } else if (error.request) {
+        console.log(`Not a 200`);
+      }
+    });
+} else if (specport) {
+  rl.question(`URL:`, function (url) {
+    rl.close();
+    let x = url + ":" + specport;
+    axios
+      .get(x, {})
+      .then((response) => {
+        if (response.status == 200) {
+          console.log(x);
+        }
+      })
+      .catch(function (error) {
+        if (error.response) {
+          console.log(error.response.status);
+        } else if (error.request) {
+          console.log(`Not a 200`);
+        }
+      });
+  });
+} else if (asn) {
+  let asnurl = `https://api.hackertarget.com/aslookup?q=${asn}`;
+  axios
+    .get(asnurl, {})
+    .then((response) => {
+      console.log(response.data);
     })
-    
-}else if(help){
-    console.log(`The flags that you can use are: 
+    .then(function () {
+      process.exit();
+    });
+} else if (help) {
+  console.log(`The flags that you can use are: 
     
     --p : Use this with a file path to print the file line by line
     --d : Use this for subdomain enumeration
@@ -126,9 +124,9 @@ if(path){
     --probe : Use this to scan a single endpoint for status 200 using default port 443
     --sp : Use this to scan single endpoint with any port that you will like, wizard setup... prompts for url
     --asn: Use this to find autonomous system numbers`);
-    process.exit();
-}else{
-    console.log(`The flags that you can use are: 
+  process.exit();
+} else {
+  console.log(`The flags that you can use are: 
     
     --p : Use this with a file path to print the file line by line
     --d : Use this for subdomain enumeration
@@ -136,5 +134,5 @@ if(path){
     --probe : Use this to scan a single endpoint for status 200 using default port 443
     --sp : Use this to scan single endpoint with any port that you will like, wizard setup... prompts for url
     --asn: Use this to find autonomous system numbers`);
-    process.exit();
+  process.exit();
 }
