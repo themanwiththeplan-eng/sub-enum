@@ -36,7 +36,7 @@ if (path) {
     }
   });
 } else if (fileprobe) {
-  // TODO: Make sure to work on filtering out the file for eachline that's read whether it's a 200 or not
+  // TODO: Continue to work on making the filtering mechanism better
   lineReader.eachLine(fileprobe, function (line, last) {
     let l = [];
     l.push(line);
