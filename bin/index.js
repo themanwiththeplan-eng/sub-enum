@@ -39,32 +39,39 @@ if(path){
     })
     
 }else if(fileprobe){
-		// TODO: Make sure to work on filtering out the file for eachline that's read whether it's a 200 or not
+		// TODO: Make sure to work on filtering out the file for eachline that's read whether it's a 200 or not	
     lineReader.eachLine(fileprobe, function(line, last) {
         let l = [];
-        l.push(line);
+				l.push(line);
         // console.log(l);
-        for(let i = 0; i < l.length; i++){
+				for(let i = 0; i < l.length; i++){
             // console.log(l[i])
-            axios.get(l[i], {
+				  axios.get(l[i], {
 
-            }).then((response) => {
+				  }).then((response) => {
                 // console.log(response.status);
-                if(response.status == 200){
-                    console.log(l[i])
-                }
-            }).catch(function(error){
-                if(error.response){
-                    console.log(error.response.status);
-                }else if(error.request){
-                    console.log(`Not a 200`);
-                }
-            }).then(function(){
-                if(last){
-                    process.exit();
-                }
-            })
-        }
+				      if(response.status == 200){
+									console.log(l[i]);
+									const arr = [(l[i])];
+									console.log(arr);
+									fs.appendFile(`reconfile`, JSON.stringify(arr), (err) => {
+										if(err){
+												console.log(err);
+										}
+									});
+							}
+					}).catch(function(error){
+				     if(error.response){
+				          console.log(error.response.status);
+				      }else if(error.request){
+				          
+				      }
+				  }).then(function(){
+				      if(last){
+				          process.exit();
+				      }
+				  })
+				}
         
         
       });
