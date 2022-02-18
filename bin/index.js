@@ -23,11 +23,15 @@ let specport = args.sp;
 let asn = args.asn;
 let help = args.h;
 
+//TODO: Work on Logo
+
 if (path) {
   lineReader.eachLine(path, function (line) {
     console.log(`Line from file: ${line}`);
   });
 } else if (subdomain) {
+  // TODO: Finish working on subdomain enumeration
+  // TODO: Write subdomains to a file after enumeration
   let initialSearch = `https://subdomains.whoisxmlapi.com/api/v1?apiKey=${key}&domainName=${subdomain}`;
   console.log(initialSearch);
   axios.get(initialSearch, {}).then((response) => {
@@ -37,21 +41,20 @@ if (path) {
   });
 } else if (fileprobe) {
   // TODO: Continue to work on making the filtering mechanism better
+  // TODO: Work or probing specport for an entire file
   lineReader.eachLine(fileprobe, function (line, last) {
     let l = [];
     l.push(line);
     // console.log(l);
     for (let i = 0; i < l.length; i++) {
-      // console.log(l[i])
+      // console.log(l[i]);
       axios
         .get(l[i], {})
         .then((response) => {
-          // console.log(response.status);
           if (response.status == 200) {
             console.log(l[i]);
-            const arr = [l[i]];
-            console.log(arr);
-            fs.appendFile(`reconfile`, JSON.stringify(arr), (err) => {
+            let arr = [l[i]];
+            fs.appendFile("reconfile", JSON.stringify(arr), (err) => {
               if (err) {
                 console.log(err);
               }
@@ -62,6 +65,7 @@ if (path) {
           if (error.response) {
             console.log(error.response.status);
           } else if (error.request) {
+            console.log(error.request.status);
           }
         })
         .then(function () {
