@@ -54,7 +54,7 @@ if (path) {
           if (response.status == 200) {
             console.log(l[i]);
             let arr = [l[i]];
-            fs.appendFile("reconfile", JSON.stringify(arr), (err) => {
+            fs.appendFile("reconfile", arr + "\n", (err) => {
               if (err) {
                 console.log(err);
               }
