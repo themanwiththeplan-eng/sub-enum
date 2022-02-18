@@ -31,13 +31,20 @@ if (path) {
 } else if (subdomain) {
   // TODO: Finish working on subdomain enumeration
   // TODO: Write subdomains to a file after enumeration
-  console.log(subdomain);
   wbUrl = `http://archive.org/wayback/available?url=${subdomain}`;
   axios.get(wbUrl, {}).then((response) => {
     let arr = [];
     let waybackUrl = response.data.archived_snapshots.closest.url;
     arr.push(waybackUrl);
     console.log(arr);
+    let scanUrl = `https://urlscan.io/api/v1/search?q=${subdomain}&size=100`;
+    axios.get(scanUrl, {}).then((response) => {
+      // console.log(response.data.results.stats);
+
+      for (let i = 0; i < response.data.results.length; i++) {
+        console.log(response.data.results.page[i]);
+      }
+    });
   });
 } else if (fileprobe) {
   // TODO: Continue to work on making the filtering mechanism better
