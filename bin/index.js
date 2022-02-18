@@ -15,7 +15,6 @@ let args = yargs.argv;
 
 let path = args.p;
 let subdomain = args.d;
-let key = args.k;
 let fileprobe = args.fp;
 let defaultport = "443";
 let probe = args.probe;
@@ -32,12 +31,13 @@ if (path) {
 } else if (subdomain) {
   // TODO: Finish working on subdomain enumeration
   // TODO: Write subdomains to a file after enumeration
-  let initialSearch = `https://subdomains.whoisxmlapi.com/api/v1?apiKey=${key}&domainName=${subdomain}`;
-  console.log(initialSearch);
-  axios.get(initialSearch, {}).then((response) => {
-    for (let i = 0; i < response.data.result.records.length; i++) {
-      console.log(response.data.result.records[i].domain);
-    }
+  console.log(subdomain);
+  wbUrl = `http://archive.org/wayback/available?url=${subdomain}`;
+  axios.get(wbUrl, {}).then((response) => {
+    let arr = [];
+    let waybackUrl = response.data.archived_snapshots.closest.url;
+    arr.push(waybackUrl);
+    console.log(arr);
   });
 } else if (fileprobe) {
   // TODO: Continue to work on making the filtering mechanism better
