@@ -30,8 +30,8 @@ if (path) {
   });
 } else if (subdomain) {
   // TODO: Add securitytrailsapi source
-  // TODO: Finish working on subdomain enumeration
   // TODO: Write subdomains to a file after enumeration
+  // TODO: Slice strings to make output look better and more readable to be used in conjuction with fileprobe
   wbUrl = `http://archive.org/wayback/available?url=${subdomain}`;
   axios.get(wbUrl, {}).then((response) => {
     let arr = [];
@@ -47,17 +47,23 @@ if (path) {
     //let scanUrl = `https://urlscan.io/api/v1/search?q=${subdomain}&size=100`;
   });
 } else if (fileprobe) {
-  // TODO: Continue to work on making the filtering mechanism better
-  // TODO: Work or probing specport for an entire file
-  lineReader.eachLine(fileprobe, function (line, last) {
+  // TODO: Make it so that the process exits after the last line is executed may have to use a do while loop
+  // TODO: Make proof of concept for readme
+  let w = process.argv[3];
+  lineReader.eachLine(fileprobe, function (line) {
     let l = [];
-    l.push(line);
+    if (w) {
+      l.push(`${line}:${w}`);
+    } else {
+      l.push(`${line}`);
+    }
     // console.log(l);
     for (let i = 0; i < l.length; i++) {
       // console.log(l[i]);
       axios
         .get(l[i], {})
         .then((response) => {
+          // console.log(response);
           if (response.status == 200) {
             console.log(l[i]);
             let arr = [l[i]];
@@ -72,12 +78,6 @@ if (path) {
           if (error.response) {
             console.log(error.response.status);
           } else if (error.request) {
-            console.log(error.request.status);
-          }
-        })
-        .then(function () {
-          if (last) {
-            process.exit();
           }
         });
     }
@@ -94,7 +94,6 @@ if (path) {
       if (error.response) {
         console.log(error.response.status);
       } else if (error.request) {
-        console.log(`Not a 200`);
       }
     });
 } else if (specport) {
