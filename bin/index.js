@@ -29,22 +29,22 @@ if (path) {
     console.log(`Line from file: ${line}`);
   });
 } else if (subdomain) {
+  // TODO: Add securitytrailsapi source
   // TODO: Finish working on subdomain enumeration
   // TODO: Write subdomains to a file after enumeration
   wbUrl = `http://archive.org/wayback/available?url=${subdomain}`;
   axios.get(wbUrl, {}).then((response) => {
     let arr = [];
     let waybackUrl = response.data.archived_snapshots.closest.url;
-    arr.push(waybackUrl);
-    console.log(arr);
-    let scanUrl = `https://urlscan.io/api/v1/search?q=${subdomain}&size=100`;
-    axios.get(scanUrl, {}).then((response) => {
-      // console.log(response.data.results.stats);
+    arr.push(JSON.stringify(waybackUrl));
+    // console.log(arr);
+    let htApi = `https://api.hackertarget.com/hostsearch/?q=${subdomain}`;
 
-      for (let i = 0; i < response.data.results.length; i++) {
-        console.log(response.data.results.page[i]);
-      }
+    axios.get(htApi, {}).then((response) => {
+      console.log(response.data);
     });
+
+    //let scanUrl = `https://urlscan.io/api/v1/search?q=${subdomain}&size=100`;
   });
 } else if (fileprobe) {
   // TODO: Continue to work on making the filtering mechanism better
