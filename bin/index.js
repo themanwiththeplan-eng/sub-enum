@@ -64,7 +64,11 @@ if (path) {
         .get(l[i], {})
         .then((response) => {
           // console.log(response);
-          if (response.status == 200) {
+          if (
+            response.status == 200 ||
+            response.status >= 300 ||
+            response.status <= 399
+          ) {
             console.log(l[i]);
             let arr = [l[i]];
             fs.appendFile("reconfile", arr + "\n", (err) => {
