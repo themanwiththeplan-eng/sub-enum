@@ -55,6 +55,9 @@ if (path) {
           } else if (err.request) {
             console.log(err.request.status);
           }
+        })
+        .then(function () {
+          process.exit();
         });
     });
 
