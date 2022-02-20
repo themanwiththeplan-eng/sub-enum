@@ -29,7 +29,7 @@ if (path) {
     console.log(`Line from file: ${line}`);
   });
 } else if (subdomain) {
-  // TODO: Add securitytrailsapi source
+  // TODO: Add more sources
   // TODO: Write subdomains to a file after enumeration
   // TODO: Slice strings to make output look better and more readable to be used in conjuction with fileprobe
   wbUrl = `http://archive.org/wayback/available?url=${subdomain}`;
@@ -42,6 +42,11 @@ if (path) {
 
     axios.get(htApi, {}).then((response) => {
       console.log(response.data);
+
+      let stUrl = `https://api.securitytrails.com/v1/domain/${subdomain}/subdomains`;
+      axios.get(stUrl, {}).then((response) => {
+        // console.log(response);
+      });
     });
 
     //let scanUrl = `https://urlscan.io/api/v1/search?q=${subdomain}&size=100`;
