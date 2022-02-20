@@ -44,9 +44,18 @@ if (path) {
       console.log(response.data);
 
       let stUrl = `https://api.securitytrails.com/v1/domain/${subdomain}/subdomains`;
-      axios.get(stUrl, {}).then((response) => {
-        // console.log(response);
-      });
+      axios
+        .get(stUrl, {})
+        .then((response) => {
+          // console.log(response);
+        })
+        .catch(function (err) {
+          if (err.response) {
+            console.log(err.response.status);
+          } else if (err.request) {
+            console.log(err.request.status);
+          }
+        });
     });
 
     //let scanUrl = `https://urlscan.io/api/v1/search?q=${subdomain}&size=100`;
