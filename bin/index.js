@@ -51,13 +51,38 @@ if (path) {
         })
         .catch(function (err) {
           if (err.response) {
-            console.log(err.response.status);
+            // console.log(err.response.status);
           } else if (err.request) {
-            console.log(err.request.status);
+            //  console.log(err.request.status);
           }
         })
-        .then(function () {
-          process.exit();
+        .then(() => {
+          let config = {
+            method: "get",
+            url: `https://crt.sh/?q=${subdomain}`,
+            headers: {
+              "User-Agent":
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36",
+              accept: "application/json",
+            },
+          };
+
+          axios(config, {})
+            .then((response) => {
+              for (let i = 0; i < response.data.length; i++) {
+                console.log(response.data[i].name_value);
+              }
+            })
+            .catch((err) => {
+              if (err.response) {
+                console.log(err.response.status);
+              } else if (err.request) {
+                console.log(err.request.status);
+              }
+            })
+            .then(() => {
+              process.exit();
+            });
         });
     });
 
@@ -72,7 +97,7 @@ if (path) {
     if (w) {
       l.push(`${line}:${w}`);
     } else {
-      l.push(`${line}`);
+      l.push(`${line}:${defaultport}`);
     }
     // console.log(l);
     for (let i = 0; i < l.length; i++) {
@@ -88,7 +113,7 @@ if (path) {
           ) {
             console.log(l[i]);
             let arr = [l[i]];
-            fs.appendFile("reconfile", arr + "\n", (err) => {
+            fs.appendFile(`${fileprobe}probe`, arr + "\n", (err) => {
               if (err) {
                 console.log(err);
               }
